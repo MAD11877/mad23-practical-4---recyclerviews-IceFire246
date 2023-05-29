@@ -43,7 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
-        private TextView titleTextView;
+        private TextView titleTextView
         private TextView descriptionTextView;
 
         public ViewHolder(View itemView) {
