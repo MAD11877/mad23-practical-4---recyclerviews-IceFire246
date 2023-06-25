@@ -37,7 +37,7 @@
         android:id="@+id/btnMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="8dp"
         android:text="MESSAGE"
         app:layout_constraintStart_toEndOf="@+id/btnFollow"

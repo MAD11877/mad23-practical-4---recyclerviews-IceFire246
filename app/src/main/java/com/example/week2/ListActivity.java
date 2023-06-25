@@ -23,6 +23,8 @@ import java.util.Random;
 
 public class ListActivity extends AppCompatActivity {
 
+    private String numName;
+    private String numDesc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,7 @@ public class ListActivity extends AppCompatActivity {
         });
         builder.setPositiveButton("View", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
-                Random r = new Random();
-                String num = Integer.toString(r.nextInt());
+                String num = numName;
 
                 Intent Main = new Intent(ListActivity.this, MainActivity.class);
                 Main.putExtra("num", num);
@@ -53,8 +54,8 @@ public class ListActivity extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++) {
             Random r = new Random();
-            String numName = "Name" + r.nextInt();
-            String numDesc = "Description "+ r.nextInt();
+            numName = Integer.toString(r.nextInt());
+            numDesc = Integer.toString(r.nextInt());
             boolean follow = r.nextBoolean();
 
             User u = new User(numName, numDesc, follow);
@@ -62,14 +63,20 @@ public class ListActivity extends AppCompatActivity {
         }
 
         class UserViewHolder extends RecyclerView.ViewHolder {
-            TextView name;
-            TextView desc;
-            ImageView img;
+            View view;
             public UserViewHolder(View itemView) {
                 super(itemView);
-                name = itemView.findViewById(android.R.id.text1);
-                desc = itemView.findViewById(android.R.id.text2);
-                img = itemView.findViewById(android.R.id.icon);
+                view = itemView;
+            }
+
+            public void setName(String name){
+                TextView mName = view.findViewById(R.id.name);
+                mName.setText("Name" + name);
+            }
+
+            public void setDesc(String desc){
+                TextView mDesc = view.findViewById(R.id.description);
+                mDesc.setText("Description " + desc);
             }
         }
 
@@ -79,29 +86,33 @@ public class ListActivity extends AppCompatActivity {
             public UserAdapter(ArrayList<User> input) {
                 data = input;
             }
-            public UserViewHolder onCreateViewHolder(
-                    ViewGroup parent,
-                    int viewType) {
+            public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View item = LayoutInflater.from(parent.getContext()).inflate(
-                        android.R.layout.simple_list_item_1,
+                        R.layout.item_layout,
                         parent,
                         false);
                 return new UserViewHolder(item);
             }
-            public void onBindViewHolder(
-                    UserViewHolder holder,
-                    int position) {
+            public void onBindViewHolder(UserViewHolder holder, int position) {
                 User u = data.get(position);
-                holder.name.setText(u.name);
-                holder.desc.setText(u.description);
-                holder.itemView.findViewById(R.id.mipmap_ic_launcher_round);
+                holder.setName(u.name);
+                holder.setDesc(u.description);
+
+                holder.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                });
             }
             public int getItemCount() {
                 return data.size();
             }
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         UserAdapter mAdapter = new UserAdapter(userList);
         LinearLayoutManager mLayoutManager =
                 new LinearLayoutManager(this);
@@ -109,15 +120,6 @@ public class ListActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v)
-            {
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
 
 
     }
